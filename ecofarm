@@ -1,0 +1,172 @@
+
+import java.util.Scanner;
+
+public class EcoFarm {
+
+    static class Fazenda {
+
+        int moedas = 500;
+        int energia = 5;
+        int poluicao = 40;
+        int plantas = 0;
+        int animais = 0;
+        int dias = 0;
+
+        void mostrarCoisas() {
+            System.out.println("===== STATUS DA FAZENDA =====");
+            System.out.println("Moedas: " + moedas);
+            System.out.println("Energia: " + energia);
+            System.out.println("Poluiçao: " + poluicao + "/100");
+            System.out.println("Plantas: " + plantas);
+            System.out.println("Animais: " + animais);
+            System.out.println("=============================");
+        }
+
+        void plantar() {
+            if (energia > 0 && moedas >= 100) {
+                energia -= 1;
+                moedas -= 100;
+                plantas += 1;
+                poluicao -= 5;
+
+                if (poluicao < 0) {
+                    poluicao = 0;
+                }
+
+                System.out.println("Você plantou novas plantinhas!");
+            } else {
+                System.out.println("Energia ou moedas insuficientes.");
+            }
+        }
+
+        void cuidarAnimais() {
+            if (energia > 0 && moedas >= 50) {
+                energia -= 1;
+                moedas -= 50;
+                animais += 1;
+                poluicao -= 3;
+
+                if (poluicao < 0) {
+                    poluicao = 0;
+                }
+
+                System.out.println("Os animais foram cuidados com sucesso!");
+            } else {
+                System.out.println("Energia ou moedas insuficientes.");
+            }
+        }
+
+        void limparArea() {
+            if (energia > 0) {
+                energia -= 1;
+                poluicao -= 10;
+
+                if (poluicao < 0) {
+                    poluicao = 0;
+                }
+
+                System.out.println("Área contaminada limpa com sucesso!");
+            } else {
+                System.out.println("Sem energia suficiente.");
+            }
+        }
+
+        void expandirFazenda() {
+            if (energia > 0 && moedas >= 200) {
+                energia -= 1;
+                moedas -= 200;
+                poluicao += 8;
+
+                System.out.println("Fazenda expandida!");
+            } else {
+                System.out.println("Recursos insuficientes.");
+            }
+        }
+
+        void passarDia() {
+            energia = 5;
+            moedas += plantas * 40;
+            moedas += animais * 30;
+            poluicao += 2;
+
+            System.out.println("Um novo dia começou!");
+            System.out.println("Produção vendida automaticamente.");
+        }
+
+        boolean perdeu() {
+            return poluicao >= 100;
+        }
+
+        boolean venceu() {
+            return poluicao <= 10 && moedas >= 2000 && dias >= 10;
+        }
+
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        Fazenda fazenda = new Fazenda();
+
+        int opcao;
+
+        System.out.println("=== ECOFARM ===");
+        System.out.println("Recupere a fazenda e reduza a poluiçao!");
+
+        do {
+            fazenda.mostrarCoisas();
+
+            System.out.println("1 - Plantar culturas");
+            System.out.println("2 - Cuidar dos animais");
+            System.out.println("3 - Limpar área contaminada");
+            System.out.println("4 - Expandir fazenda");
+            System.out.println("5 - Passar o dia");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opçao: ");
+
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    fazenda.plantar();
+                    break;
+
+                case 2:
+                    fazenda.cuidarAnimais();
+                    break;
+
+                case 3:
+                    fazenda.limparArea();
+                    break;
+
+                case 4:
+                    fazenda.expandirFazenda();
+                    break;
+
+                case 5:
+                    fazenda.passarDia();
+                    break;
+
+                case 0:
+                    System.out.println("Encerrando jogo...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida.");
+            }
+
+            if (fazenda.perdeu()) {
+                System.out.println("A poluição atingiu o nível máximo!");
+                System.out.println("O MUNDO SE EXPLODIU POR SUA CAUSA!");
+                break;
+            }
+            if (fazenda.venceu()) {
+                System.out.println("Parabéns!");
+                System.out.println("você salvou a fazenda!");
+                break;
+            }
+
+        } while (opcao != 0);
+
+    }
+}
